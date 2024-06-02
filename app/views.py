@@ -1,11 +1,10 @@
 from datetime import date
+
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from pyexpat.errors import messages
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.contrib import messages
-from .models import Client, Product, Provider, Specialty
-from .models import Pet
-from .models import Medicine
-from .models import Vet
+
+from .models import Client, Medicine, Pet, Product, Provider, Specialty, Vet
+
 
 def home(request):
     return render(request, "home.html")
@@ -321,14 +320,14 @@ def delete_selected_medicines(request):
         pet.medicines.remove(*medicine_ids)
     return redirect('pets_repo')
 
-def select_vets_to_delete(request):
+def select_vets_for_deletion(request):
     pet_id = request.GET.get('id')
     pet = get_object_or_404(Pet, pk=pet_id)
     vets = pet.vets.all()
     return render(request, 'pets/select_vets.html', {'vets': vets, 'pet_id': pet_id})
 
 
-def delete_selected_vets(request):
+def delete_vets_selected(request):
     if request.method == 'POST':
         medicine_ids = request.POST.getlist('medicines[]')
         pet_id = request.POST.get('pet_id')

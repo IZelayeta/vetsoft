@@ -1,6 +1,9 @@
 from datetime import date
+
 from django.test import TestCase
-from app.models import Client, Provider, Vet, Specialty, Medicine, Pet
+
+from app.models import Client, Medicine, Pet, Provider, Specialty, Vet
+
 
 class ClientModelTest(TestCase):
     def test_can_create_and_get_client(self):
