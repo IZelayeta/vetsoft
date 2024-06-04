@@ -17,6 +17,15 @@ class Specialty(Enum):
         return [(key.value, key.value) for key in cls]
 
 def validate_client(data):
+    """
+    Valida los datos de un cliente.
+
+    Args:
+        data (dict): Diccionario con los datos del cliente.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -37,6 +46,15 @@ def validate_client(data):
     return errors
 
 def validate_provider(data):
+    """
+    Valida los datos de un proveedor.
+
+    Args:
+        data (dict): Diccionario con los datos del proveedor.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -53,6 +71,15 @@ def validate_provider(data):
     return errors
 
 def validate_vet(data):
+    """
+    Valida los datos de un veterinario.
+
+    Args:
+        data (dict): Diccionario con los datos del veterinario.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -113,6 +140,15 @@ class Vet(models.Model):
         self.save()
 
 def validate_product(data):
+    """
+    Valida los datos de un producto.
+
+    Args:
+        data (dict): Diccionario con los datos del producto.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -144,6 +180,15 @@ def validate_product(data):
     return errors
 
 def validate_pet(data):
+    """
+    Valida los datos de una mascota.
+
+    Args:
+        data (dict): Diccionario con los datos de la mascota.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -275,6 +320,15 @@ class Client(models.Model):
         self.save()
 
 def validate_medicine(data):
+    """
+    Valida los datos de una medicina.
+
+    Args:
+        data (dict): Diccionario con los datos de la medicina.
+
+    Returns:
+        dict: Diccionario con los errores de validación.
+    """
     errors = {}
 
     name = data.get("name", "")

@@ -8,6 +8,16 @@ links = [
 
 
 def navbar(request):
+    """
+        Genera un diccionario de contexto que contiene una lista de enlaces de navegación,
+        marcando el enlace activo actual basado en la ruta de la solicitud.
+
+        Args:
+            request: El objeto HttpRequest.
+
+        Returns:
+            dict: Un diccionario con los enlaces de navegación y su estado activo.
+    """
     def add_active(link):
         copy = link.copy()
 
