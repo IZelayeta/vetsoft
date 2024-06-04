@@ -4,6 +4,31 @@ from django.db import models
 
 
 class Specialty(Enum):
+    """
+    Enumeración para las especialidades veterinarias.
+
+    Atributos:
+    ----------
+    GENERAL : str
+        Especialidad de medicina general.
+    SURGERY : str
+        Especialidad en cirugía.
+    DERMATOLOGY : str
+        Especialidad en dermatología.
+    ORTHOPEDICS : str
+        Especialidad en ortopedia.
+    CARDIOLOGY : str
+        Especialidad en cardiología.
+    OPHTHALMOLOGY : str
+        Especialidad en oftalmología.
+    NEUROLOGY : str
+        Especialidad en neurología.
+
+    Métodos:
+    --------
+    choices():
+        Devuelve una lista de tuplas con las especialidades disponibles.
+    """
     GENERAL = "General"
     SURGERY = "Cirugía"
     DERMATOLOGY = "Dermatología"
@@ -107,6 +132,29 @@ def validate_vet(data):
 
 
 class Vet(models.Model):
+    """
+    Modelo para representar un veterinario.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre del veterinario.
+    phone : str
+        Teléfono del veterinario.
+    email : str
+        Correo electrónico del veterinario.
+    specialty : str
+        Especialidad del veterinario, seleccionada de la enumeración Specialty.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre del veterinario.
+    save_vet(vet_data):
+        Guarda un nuevo veterinario en la base de datos si los datos son válidos.
+    update_vet(vet_data):
+        Actualiza los datos de un veterinario existente.
+    """
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
@@ -221,6 +269,27 @@ def validate_pet(data):
     return errors
                 
 class Provider(models.Model):
+    """
+    Modelo para representar un proveedor.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre del proveedor.
+    email : str
+        Correo electrónico del proveedor.
+    address : str, opcional
+        Dirección del proveedor.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre del proveedor.
+    save_provider(provider_data):
+        Guarda un nuevo proveedor en la base de datos si los datos son válidos.
+    update_provider(provider_data):
+        Actualiza los datos de un proveedor existente.
+    """
     name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=100, blank=True)
@@ -250,6 +319,29 @@ class Provider(models.Model):
         self.save()
     
 class Product(models.Model):
+    """
+    Modelo para representar un producto.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre del producto.
+    type : str
+        Tipo del producto.
+    price : float
+        Precio del producto.
+    provider : ForeignKey
+        Proveedor del producto.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre del producto.
+    save_product(product_data):
+        Guarda un nuevo producto en la base de datos si los datos son válidos.
+    update_product(product_data):
+        Actualiza los datos de un producto existente.
+    """
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=50)
     price = models.FloatField()
@@ -286,6 +378,31 @@ class Product(models.Model):
         self.save()
 
 class Client(models.Model):
+    """
+    Modelo para representar un cliente.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre del cliente.
+    phone : int
+        Número de teléfono del cliente.
+    email : str
+        Correo electrónico del cliente.
+    address : str, opcional
+        Dirección del cliente.
+    products : ManyToManyField
+        Productos asociados al cliente.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre del cliente.
+    save_client(client_data):
+        Guarda un nuevo cliente en la base de datos si los datos son válidos.
+    update_client(client_data):
+        Actualiza los datos de un cliente existente.
+    """
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField()
@@ -361,6 +478,27 @@ def validate_medicine(data):
 
 
 class Medicine(models.Model):
+    """
+    Modelo para representar una medicina.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre de la medicina.
+    description : str
+        Descripción de la medicina.
+    dose : float
+        Dosis de la medicina.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre de la medicina.
+    save_medicine(medicine_data):
+        Guarda una nueva medicina en la base de datos si los datos son válidos.
+    update_medicine(medicine_data):
+        Actualiza los datos de una medicina existente.
+    """
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
     dose = models.FloatField()
@@ -392,6 +530,35 @@ class Medicine(models.Model):
         self.save()
 
 class Pet(models.Model):
+    """
+    Modelo para representar una mascota.
+
+    Atributos:
+    ----------
+    name : str
+        Nombre de la mascota.
+    breed : str
+        Raza de la mascota.
+    birthday : DateField
+        Fecha de cumpleaños de la mascota.
+    weight : float
+        Peso de la mascota.
+    client : ForeignKey
+        Cliente al que pertenece la mascota.
+    medicines : ManyToManyField
+        Medicinas asociadas a la mascota.
+    vets : ManyToManyField
+        Veterinarios asociados a la mascota.
+
+    Métodos:
+    --------
+    __str__():
+        Devuelve una representación en cadena del nombre de la mascota.
+    save_pet(pet_data):
+        Guarda una nueva mascota en la base de datos si los datos son válidos.
+    update_pet(pet_data):
+        Actualiza los datos de una mascota existente.
+    """
     name=models.CharField(max_length=100)
     breed=models.CharField(max_length=100)
     birthday=models.DateField(verbose_name="Fecha de Cumpleaños")
