@@ -58,7 +58,7 @@ def providers_form(request, id=None):
             return redirect(reverse("providers_repo"))
 
         return render(
-            request, "providers/form.html", {"errors": errors, "provider": request.POST}
+            request, "providers/form.html", {"errors": errors, "provider": request.POST},
         )
 
     provider = None
@@ -124,7 +124,7 @@ def clients_form(request, id=None):
             return redirect(reverse("clients_repo"))
 
         return render(
-            request, "clients/form.html", {"errors": errors, "client": request.POST}
+            request, "clients/form.html", {"errors": errors, "client": request.POST},
         )
 
     client = None
@@ -194,7 +194,7 @@ def vets_form(request, id=None):
             return redirect(reverse("vets_repo"))
 
         return render(
-            request, "vets/form.html", {"errors": errors, "vet": request.POST, "specialties": specialties}
+            request, "vets/form.html", {"errors": errors, "vet": request.POST, "specialties": specialties},
         )
 
     vet = None
@@ -318,7 +318,7 @@ def product_form(request, id=None):
             return redirect(reverse("products_repo"))
 
         return render(
-            request, "products/form.html", {"errors": errors, "product": request.POST, "providers": providers}
+            request, "products/form.html", {"errors": errors, "product": request.POST, "providers": providers},
         )
 
     product = None
@@ -387,7 +387,7 @@ def medicine_form(request, id=None):
             return redirect(reverse("medicine_repo"))
 
         return render(
-            request, "medicine/form.html", {"errors": errors, "medicine": request.POST}
+            request, "medicine/form.html", {"errors": errors, "medicine": request.POST},
         )
 
     medicine = None
