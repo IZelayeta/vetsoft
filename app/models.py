@@ -238,14 +238,14 @@ class Provider(models.Model):
         Provider.objects.create(
             name=provider_data.get("name"),
             email=provider_data.get("email"),
-            address=provider_data.get("address"),
+            city=provider_data.get("city"),
         )
         return True, None
     
     def update_provider(self, provider_data):
         self.name = provider_data.get("name", "") or self.name
         self.email = provider_data.get("email", "") or self.email
-        self.address = provider_data.get("address", "") or self.address
+        self.city = provider_data.get("city", "") or self.city
 
         self.save()
     
@@ -289,7 +289,7 @@ class Client(models.Model):
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField()
-    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
     products = models.ManyToManyField(Product)
 
     def str(self):
@@ -306,7 +306,7 @@ class Client(models.Model):
             name=client_data.get("name"),
             phone=client_data.get("phone"),
             email=client_data.get("email"),
-            address=client_data.get("address"),
+            city=client_data.get("city"),
         )
 
         return True, None
@@ -315,7 +315,7 @@ class Client(models.Model):
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
-        self.address = client_data.get("address", "") or self.address
+        self.city = client_data.get("city", "") or self.city
 
         self.save()
 
