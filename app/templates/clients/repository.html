@@ -17,7 +17,7 @@
                 <th>Nombre</th>
                 <th>Teléfono</th>
                 <th>Email</th>
-                <th>Dirección</th>
+                <th>Ciudad</th>
                 <th>Productos</th>
                 <th></th>
                 <th></th>
@@ -30,7 +30,7 @@
                     <td>{{client.name}}</td>
                     <td>{{client.phone}}</td>
                     <td>{{client.email}}</td>
-                    <td>{{client.address}}</td>
+                    <td>{{client.city}}</td>
                     <td>
                         {% for product in client.products.all %}
                             {{ product.name }}{% if not forloop.last %}, {% endif %}

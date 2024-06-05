@@ -30,9 +30,7 @@
                         required/>
 
                     {% if errors.name %}
-                        <div class="invalid-feedback">
-                            {{ errors.name }}
-                        </div>
+                    <div style="color: #ea868f; font-size: 0.875rem; margin-top: 0.25rem;"> {{errors.name}} </div>
                     {% endif %}
                 </div>
                 <div>
@@ -66,18 +64,18 @@
                     {% endif %}
                 </div>
                 <div>
-                    <label for="address" class="form-label">Dirección</label>
-                    <input type="text"
-                        id="address"
-                        name="address"
-                        value="{{client.address}}"
-                        class="form-control" />
-
+                    <label for="city" class="form-label">Ciudad</label>
+                    <select id="city" name="city" class="form-select">
+                        <option value="La Plata" {% if client.city == "La Plata" %} selected {% endif %}>La Plata</option>
+                        <option value="Berisso" {% if client.city == "Berisso" %} selected {% endif %}>Berisso</option>
+                        <option value="Ensenada" {% if client.city == "Ensenada" %} selected {% endif %}>Ensenada</option>
+                    </select>
+                
                     <div class="invalid-feedback">
-                        La dirrección es opcional
+                        La ciudad es obligatoria
                     </div>
                 </div>
-
+                
                 <button class="btn btn-primary">Guardar</button>
             </form>
         </div>

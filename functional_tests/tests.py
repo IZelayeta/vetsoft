@@ -14,11 +14,20 @@ slow_mo = os.environ.get("SLOW_MO", 0)
 
 
 class PlaywrightTestCase(StaticLiveServerTestCase):
+    """
+    Test case class for using Playwright with Django StaticLiveServerTestCase.
+
+    This class sets up and tears down a Playwright browser and page for each test case.
+
+    Attributes:
+        browser (playwright.browser.Browser): The Playwright browser instance.
+        page (playwright.page.Page): The Playwright page instance.
+    """
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.browser: Browser = playwright.firefox.launch(
-            headless=headless, slow_mo=int(slow_mo)
+            headless=headless, slow_mo=int(slow_mo),
         )
 
     @classmethod
@@ -35,7 +44,17 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
         self.page.close()
 
 
-class HomeTestCase(PlaywrightTestCase):
+class cleaHomeTestCase(PlaywrightTestCase):
+    """
+    Test case class for testing the home page of the CLEA application.
+
+    This class inherits from PlaywrightTestCase and contains test methods to check
+    the presence and functionality of navigation links and cards on the home page.
+
+    Attributes:
+        live_server_url (str): The URL of the live server.
+    """
+
     def test_should_have_navbar_with_links(self):
         self.page.goto(self.live_server_url)
 
@@ -62,6 +81,16 @@ class HomeTestCase(PlaywrightTestCase):
 
 
 class ClientsRepoTestCase(PlaywrightTestCase):
+    """
+    Test case class for testing the clients repository functionality in the CLEA application.
+
+    This class inherits from PlaywrightTestCase and contains test methods to verify various aspects
+    of the clients repository, including displaying messages for empty tables, showing client data,
+    and performing actions such as adding, editing, and deleting clients.
+
+    Attributes:
+        live_server_url (str): The URL of the live server.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
@@ -69,16 +98,16 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
     def test_should_show_clients_data(self):
         Client.objects.create(
-            name="Juan Sebastián Veron",
-            address="13 y 44",
+            name="Juan Sebastián Veron", 
             phone="54221555232",
+            city="La Plata",
             email="brujita75@hotmail.com",
         )
 
         Client.objects.create(
             name="Guido Carrillo",
-            address="1 y 57",
             phone="54221232555",
+            city="Berisso",
             email="goleador@gmail.com",
         )
 
@@ -87,12 +116,12 @@ class ClientsRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("No existen clientes")).not_to_be_visible()
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).to_be_visible()
-        expect(self.page.get_by_text("13 y 44")).to_be_visible()
+        expect(self.page.get_by_text("La Plata")).to_be_visible()
         expect(self.page.get_by_text("54221555232")).to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).to_be_visible()
 
         expect(self.page.get_by_text("Guido Carrillo")).to_be_visible()
-        expect(self.page.get_by_text("1 y 57")).to_be_visible()
+        expect(self.page.get_by_text("Berisso")).to_be_visible()
         expect(self.page.get_by_text("54221232555")).to_be_visible()
         expect(self.page.get_by_text("goleador@gmail.com")).to_be_visible()
 
@@ -100,15 +129,15 @@ class ClientsRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
         add_client_action = self.page.get_by_role(
-            "link", name="Nuevo cliente", exact=False
+            "link", name="Nuevo cliente", exact=False,
         )
         expect(add_client_action).to_have_attribute("href", reverse("clients_form"))
 
     def test_should_show_client_edit_action(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
             phone="54221555232",
+            city="La Plata",
             email="brujita75@hotmail.com",
         )
 
@@ -116,21 +145,21 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("clients_edit", kwargs={"id": client.id})
+            "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
     def test_should_show_client_delete_action(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
             phone="54221555232",
+            city="La Plata",
             email="brujita75@hotmail.com",
         )
 
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de cliente"
+            "form", name="Formulario de eliminación de cliente",
         )
         client_id_input = edit_form.locator("input[name=client_id]")
 
@@ -143,8 +172,8 @@ class ClientsRepoTestCase(PlaywrightTestCase):
     def test_should_can_be_able_to_delete_a_client(self):
         Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
             phone="54221555232",
+            city="La Plata",
             email="brujita75@hotmail.com",
         )
 
@@ -166,6 +195,15 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
 
 class ClientCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar el comportamiento del repositorio de proveedores en la aplicación CLEA.
+
+    Esta clase contiene varios métodos de prueba para garantizar que la interfaz de usuario del repositorio de proveedores funcione correctamente,
+    incluyendo la visualización de mensajes cuando la tabla está vacía, la muestra de datos de los proveedores, y la capacidad de agregar, editar y eliminar proveedores.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_client(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
@@ -174,14 +212,15 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
         self.page.get_by_label("Teléfono").fill("54221555232")
         self.page.get_by_label("Email").fill("brujita75@hotmail.com")
-        self.page.get_by_label("Dirección").fill("13 y 44")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
+
 
         self.page.get_by_role("button", name="Guardar").click()
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).to_be_visible()
         expect(self.page.get_by_text("54221555232")).to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).to_be_visible()
-        expect(self.page.get_by_text("13 y 44")).to_be_visible()
+        expect(self.page.get_by_text("La Plata")).to_be_visible()
 
     def test_should_view_errors_if_form_is_invalid(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
@@ -197,24 +236,25 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
         self.page.get_by_label("Teléfono").fill("54221555232")
         self.page.get_by_label("Email").fill("brujita75")
-        self.page.get_by_label("Dirección").fill("13 y 44")
-
+        self.page.get_by_label("Ciudad").select_option("La Plata")
         self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).to_be_visible()
 
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(
-            self.page.get_by_text("Por favor ingrese un teléfono")
+            self.page.get_by_text("Por favor ingrese un teléfono"),
         ).not_to_be_visible()
 
         expect(
-            self.page.get_by_text("Por favor ingrese un email valido")
+            self.page.get_by_text("Por favor ingrese un email valido"),
         ).to_be_visible()
 
     def test_should_be_able_to_edit_a_client(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
             phone="54221555232",
+            city="La Plata",
             email="brujita75@hotmail.com",
         )
 
@@ -224,26 +264,36 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Guido Carrillo")
         self.page.get_by_label("Teléfono").fill("54221232555")
         self.page.get_by_label("Email").fill("goleador@gmail.com")
-        self.page.get_by_label("Dirección").fill("1 y 57")
+        self.page.get_by_label("Ciudad").select_option("Berisso")
 
         self.page.get_by_role("button", name="Guardar").click()
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).not_to_be_visible()
-        expect(self.page.get_by_text("13 y 44")).not_to_be_visible()
+        expect(self.page.get_by_text("La Plata")).not_to_be_visible()
         expect(self.page.get_by_text("54221555232")).not_to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).not_to_be_visible()
 
         expect(self.page.get_by_text("Guido Carrillo")).to_be_visible()
-        expect(self.page.get_by_text("1 y 57")).to_be_visible()
+        expect(self.page.get_by_text("Berisso")).to_be_visible()
         expect(self.page.get_by_text("54221232555")).to_be_visible()
         expect(self.page.get_by_text("goleador@gmail.com")).to_be_visible()
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("clients_edit", kwargs={"id": client.id})
+            "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
 class ProvidersRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de casos de prueba para probar la funcionalidad del repositorio de proveedores en la aplicación CLEA.
+
+    Esta clase hereda de PlaywrightTestCase y contiene métodos de prueba para verificar varios aspectos
+    del repositorio de proveedores, incluida la visualización de mensajes para tablas vacías, la muestra de datos de proveedores
+    y la realización de acciones como agregar, editar y eliminar proveedores.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
@@ -278,7 +328,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
         add_provider_action = self.page.get_by_role(
-            "link", name="Nuevo proveedor", exact=False
+            "link", name="Nuevo proveedor", exact=False,
         )
         expect(add_provider_action).to_have_attribute("href", reverse("providers_form"))
 
@@ -293,7 +343,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("providers_edit", kwargs={"id": provider.id})
+            "href", reverse("providers_edit", kwargs={"id": provider.id}),
         )
 
     def test_should_show_provider_delete_action(self):
@@ -306,7 +356,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de proveedor"
+            "form", name="Formulario de eliminación de proveedor",
         )
         provider_id_input = edit_form.locator("input[name=provider_id]")
 
@@ -340,6 +390,15 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("katerina mariescurrena")).not_to_be_visible()
         
 class ProviderCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de proveedores en la aplicación CLEA.
+
+    Esta clase contiene varios métodos de prueba para garantizar que la interfaz de usuario del formulario de proveedores funcione correctamente,
+    incluyendo la capacidad de crear un nuevo proveedor, visualizar errores en caso de que el formulario sea inválido y editar un proveedor existente.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_provider(self):
         self.page.goto(f"{self.live_server_url}{reverse('providers_form')}")
 
@@ -400,7 +459,14 @@ class ProviderCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute("href", reverse("providers_edit", kwargs={"id": provider.id}))
 
 class VetsRepoTestCase(PlaywrightTestCase):
-    
+    """
+    Clase de prueba para verificar la funcionalidad relacionada con los veterinarios en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la visualización, creación, edición y eliminación de veterinarios a través de la interfaz de usuario.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
 
@@ -439,7 +505,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
 
         add_vet_action = self.page.get_by_role(
-            "link", name="Nuevo veterinario", exact=False
+            "link", name="Nuevo veterinario", exact=False,
         )
         expect(add_vet_action).to_have_attribute("href", reverse("vets_form"))
     
@@ -455,7 +521,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("vets_edit", kwargs={"id": vet.id})
+            "href", reverse("vets_edit", kwargs={"id": vet.id}),
         )
 
     def test_should_show_vet_delete_action(self):
@@ -468,7 +534,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de veterinario"
+            "form", name="Formulario de eliminación de veterinario",
         )
         vet_id_input = edit_form.locator("input[name=vet_id]")
         expect(edit_form).to_be_visible()
@@ -501,6 +567,15 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
     
 class PetCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de mascotas en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de mascotas a través del formulario de mascotas.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
+
     def test_should_be_able_to_create_a_new_pet(self):
         client = Client.objects.create(
         name="Juan Sebastian Veron",
@@ -528,6 +603,14 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Sin Medicinas")).to_be_visible()
 
 class MedicineRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar las operaciones CRUD de medicamentos en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la visualización, creación, edición y eliminación de medicamentos.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
@@ -562,7 +645,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
         add_medicine_action = self.page.get_by_role(
-            "link", name="Nueva medicina", exact=False
+            "link", name="Nueva medicina", exact=False,
         )
         expect(add_medicine_action).to_have_attribute("href", reverse("medicine_form"))
 
@@ -577,7 +660,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("medicine_edit", kwargs={"id": medicine.id})
+            "href", reverse("medicine_edit", kwargs={"id": medicine.id}),
         )
 
     def test_should_show_client_delete_action(self):
@@ -590,7 +673,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de la medicina"
+            "form", name="Formulario de eliminación de la medicina",
         )
         medicine_id_input = edit_form.locator("input[name=medicine_id]")
 
@@ -624,6 +707,14 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("ibuprofeno")).not_to_be_visible()
        
 class VetCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de veterinarios en la aplicación CLEA.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de veterinarios a través del formulario de veterinario.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_vet(self):
         self.page.goto(f"{self.live_server_url}{reverse('vets_form')}")
 
@@ -694,10 +785,18 @@ class VetCreateEditTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("vets_edit", kwargs={"id": vet.id})
+            "href", reverse("vets_edit", kwargs={"id": vet.id}),
         )
-     
+
 class MedicineCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de medicamentos en la aplicación CLEA.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de medicamentos a través del formulario de medicamentos.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_medicine(self):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_form')}")
 
@@ -755,5 +854,5 @@ class MedicineCreateEditTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("medicine_edit", kwargs={"id": medicine.id})
+            "href", reverse("medicine_edit", kwargs={"id": medicine.id}),
         )
