@@ -417,7 +417,7 @@ class Pet(models.Model):
             breed= pet_data.get("breed"),
             birthday = pet_data.get("birthday"),
             weight = pet_data.get("weight"),
-            client = client2
+            client = client2,
         )
 
         return True, None

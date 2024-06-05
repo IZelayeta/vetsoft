@@ -348,7 +348,7 @@ class PetsTest(TestCase):
                 "phone": "221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
-            }
+            },
         )
 
         response = self.client.post(
@@ -358,7 +358,7 @@ class PetsTest(TestCase):
                 "breed": "Border Collie",
                 "birthday": date(2024,5,5),
                 "weight": 10,
-                "client":1
+                "client":1,
             },
         )
 
@@ -391,7 +391,7 @@ class PetsTest(TestCase):
                 "phone": "221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
-            }
+            },
         )
         response = self.client.post(
             reverse("pets_form"),
@@ -400,7 +400,7 @@ class PetsTest(TestCase):
                 "breed": "Border Collie",
                 "birthday": date(2024,5,5),
                 "weight": 0,
-                "client":1
+                "client":1,
             },
         )
         self.assertContains(response, "Por favor ingrese un peso mayor que 0")
