@@ -14,6 +14,15 @@ slow_mo = os.environ.get("SLOW_MO", 0)
 
 
 class PlaywrightTestCase(StaticLiveServerTestCase):
+    """
+    Test case class for using Playwright with Django StaticLiveServerTestCase.
+
+    This class sets up and tears down a Playwright browser and page for each test case.
+
+    Attributes:
+        browser (playwright.browser.Browser): The Playwright browser instance.
+        page (playwright.page.Page): The Playwright page instance.
+    """
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -35,7 +44,17 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
         self.page.close()
 
 
-class HomeTestCase(PlaywrightTestCase):
+class cleaHomeTestCase(PlaywrightTestCase):
+    """
+    Test case class for testing the home page of the CLEA application.
+
+    This class inherits from PlaywrightTestCase and contains test methods to check
+    the presence and functionality of navigation links and cards on the home page.
+
+    Attributes:
+        live_server_url (str): The URL of the live server.
+    """
+
     def test_should_have_navbar_with_links(self):
         self.page.goto(self.live_server_url)
 
@@ -62,6 +81,16 @@ class HomeTestCase(PlaywrightTestCase):
 
 
 class ClientsRepoTestCase(PlaywrightTestCase):
+    """
+    Test case class for testing the clients repository functionality in the CLEA application.
+
+    This class inherits from PlaywrightTestCase and contains test methods to verify various aspects
+    of the clients repository, including displaying messages for empty tables, showing client data,
+    and performing actions such as adding, editing, and deleting clients.
+
+    Attributes:
+        live_server_url (str): The URL of the live server.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
@@ -166,6 +195,15 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
 
 class ClientCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar el comportamiento del repositorio de proveedores en la aplicación CLEA.
+
+    Esta clase contiene varios métodos de prueba para garantizar que la interfaz de usuario del repositorio de proveedores funcione correctamente,
+    incluyendo la visualización de mensajes cuando la tabla está vacía, la muestra de datos de los proveedores, y la capacidad de agregar, editar y eliminar proveedores.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_client(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
@@ -195,12 +233,13 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Por favor ingrese un teléfono")).to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese un email")).to_be_visible()
 
-        self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
+        self.page.get_by_label("Nombre").fill("Juan Sebastián Veron54")
         self.page.get_by_label("Teléfono").fill("221555232")
         self.page.get_by_label("Email").fill("brujita75")
         self.page.get_by_label("Ciudad").select_option("La Plata")
-
         self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).to_be_visible()
 
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(
@@ -245,6 +284,16 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         )
 
 class ProvidersRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de casos de prueba para probar la funcionalidad del repositorio de proveedores en la aplicación CLEA.
+
+    Esta clase hereda de PlaywrightTestCase y contiene métodos de prueba para verificar varios aspectos
+    del repositorio de proveedores, incluida la visualización de mensajes para tablas vacías, la muestra de datos de proveedores
+    y la realización de acciones como agregar, editar y eliminar proveedores.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
@@ -341,6 +390,15 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("katerina mariescurrena")).not_to_be_visible()
         
 class ProviderCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de proveedores en la aplicación CLEA.
+
+    Esta clase contiene varios métodos de prueba para garantizar que la interfaz de usuario del formulario de proveedores funcione correctamente,
+    incluyendo la capacidad de crear un nuevo proveedor, visualizar errores en caso de que el formulario sea inválido y editar un proveedor existente.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_provider(self):
         self.page.goto(f"{self.live_server_url}{reverse('providers_form')}")
 
@@ -401,7 +459,14 @@ class ProviderCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute("href", reverse("providers_edit", kwargs={"id": provider.id}))
 
 class VetsRepoTestCase(PlaywrightTestCase):
-    
+    """
+    Clase de prueba para verificar la funcionalidad relacionada con los veterinarios en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la visualización, creación, edición y eliminación de veterinarios a través de la interfaz de usuario.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
 
@@ -502,6 +567,15 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
     
 class PetCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de mascotas en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de mascotas a través del formulario de mascotas.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
+
     def test_should_be_able_to_create_a_new_pet(self):
         client = Client.objects.create(
         name="Juan Sebastian Veron",
@@ -529,6 +603,14 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Sin Medicinas")).to_be_visible()
 
 class MedicineRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar las operaciones CRUD de medicamentos en la aplicación.
+
+    Esta clase contiene métodos de prueba para verificar la visualización, creación, edición y eliminación de medicamentos.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
@@ -625,6 +707,14 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("ibuprofeno")).not_to_be_visible()
        
 class VetCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de veterinarios en la aplicación CLEA.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de veterinarios a través del formulario de veterinario.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_vet(self):
         self.page.goto(f"{self.live_server_url}{reverse('vets_form')}")
 
@@ -697,8 +787,16 @@ class VetCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute(
             "href", reverse("vets_edit", kwargs={"id": vet.id}),
         )
-     
+
 class MedicineCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de prueba para verificar la creación y edición de registros de medicamentos en la aplicación CLEA.
+
+    Esta clase contiene métodos de prueba para verificar la creación y edición de registros de medicamentos a través del formulario de medicamentos.
+
+    Atributos:
+        live_server_url (str): La URL del servidor en vivo.
+    """
     def test_should_be_able_to_create_a_new_medicine(self):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_form')}")
 

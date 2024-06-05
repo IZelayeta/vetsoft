@@ -6,6 +6,18 @@ from app.models import Client, Medicine, Pet, Provider, Specialty, Vet
 
 
 class ClientModelTest(TestCase):
+    """
+    Pruebas para el modelo Client.
+
+    Métodos:
+    --------
+    test_can_create_and_get_client():
+        Verifica si se puede crear un cliente y obtenerlo correctamente.
+    test_can_update_client():
+        Verifica si se puede actualizar un cliente correctamente.
+    test_update_client_with_error():
+        Verifica si no se actualiza un cliente cuando se proporciona un dato inválido.
+    """
     def test_can_create_and_get_client(self):
         Client.save_client(
             {
@@ -22,6 +34,18 @@ class ClientModelTest(TestCase):
         self.assertEqual(str(clients[0].phone), "221555232")
         self.assertEqual(clients[0].city, "La Plata")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
+
+    def test_cant_create_client_with_error(self):
+        Client.save_client(
+            {
+                "name": "",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "",
+            },
+        )
+        clients = Client.objects.all()
+        self.assertEqual(len(clients), 0)
 
     def test_can_update_client(self):
         Client.save_client(
@@ -61,6 +85,18 @@ class ClientModelTest(TestCase):
         self.assertEqual(str(client_updated.phone), "221555232")
 
 class ProviderModelTest(TestCase):
+    """
+    Pruebas para el modelo Provider.
+
+    Métodos:
+    --------
+    test_can_create_and_get_provider():
+        Verifica si se puede crear un proveedor y obtenerlo correctamente.
+    test_can_update_provider():
+        Verifica si se puede actualizar un proveedor correctamente.
+    test_update_provider_with_error():
+        Verifica que no se actualice un proveedor cuando se proporciona un dato inválido.
+    """
     def test_can_create_and_get_provider(self):
         Provider.save_provider(
             {
@@ -114,6 +150,18 @@ class ProviderModelTest(TestCase):
         self.assertEqual(provider_updated.address, "17 y 166")
 
 class VetModelTest(TestCase):
+    """
+    Pruebas para el modelo Vet.
+
+    Métodos:
+    --------
+    test_can_create_and_get_vet():
+        Verifica si se puede crear un veterinario y obtenerlo correctamente.
+    test_can_update_vet():
+        Verifica si se puede actualizar la especialidad de un veterinario correctamente.
+    test_update_vet_with_error():
+        Verifica que no se actualice la especialidad de un veterinario con una especialidad inválida.
+    """
     def test_can_create_and_get_vet(self):
         Vet.save_vet(
             {
@@ -168,6 +216,14 @@ class VetModelTest(TestCase):
             
 
 class PetModelTest(TestCase, ):
+    """
+    Pruebas para el modelo Pet.
+
+    Métodos:
+    --------
+    test_can_create_and_get_pet():
+        Verifica si se puede crear una mascota y obtenerla correctamente.
+    """
     def test_can_create_and_get_pet(self):
         Client.save_client(
             {
@@ -196,6 +252,14 @@ class PetModelTest(TestCase, ):
         self.assertEqual(pets[0].client, Client.objects.get(pk=1))
 
 class MedicineModelTest(TestCase):
+    """
+    Pruebas para el modelo Medicine.
+
+    Métodos:
+    --------
+    test_can_create_and_get_medicine():
+        Verifica si se puede crear un medicamento y obtenerlo correctamente.
+    """
     def test_can_create_and_get_medicine(self):
         Medicine.save_medicine(
             {
