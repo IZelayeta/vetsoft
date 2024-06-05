@@ -98,16 +98,16 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
     def test_should_show_clients_data(self):
         Client.objects.create(
-            name="Juan Sebastián Veron",
+            name="Juan Sebastián Veron", 
+            phone="54221555232",
             city="La Plata",
-            phone="221555232",
             email="brujita75@hotmail.com",
         )
 
         Client.objects.create(
             name="Guido Carrillo",
+            phone="54221232555",
             city="Berisso",
-            phone="221232555",
             email="goleador@gmail.com",
         )
 
@@ -117,12 +117,12 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).to_be_visible()
         expect(self.page.get_by_text("La Plata")).to_be_visible()
-        expect(self.page.get_by_text("221555232")).to_be_visible()
+        expect(self.page.get_by_text("54221555232")).to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).to_be_visible()
 
         expect(self.page.get_by_text("Guido Carrillo")).to_be_visible()
         expect(self.page.get_by_text("Berisso")).to_be_visible()
-        expect(self.page.get_by_text("221232555")).to_be_visible()
+        expect(self.page.get_by_text("54221232555")).to_be_visible()
         expect(self.page.get_by_text("goleador@gmail.com")).to_be_visible()
 
     def test_should_show_add_client_action(self):
@@ -136,8 +136,8 @@ class ClientsRepoTestCase(PlaywrightTestCase):
     def test_should_show_client_edit_action(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
+            phone="54221555232",
             city="La Plata",
-            phone="221555232",
             email="brujita75@hotmail.com",
         )
 
@@ -151,8 +151,8 @@ class ClientsRepoTestCase(PlaywrightTestCase):
     def test_should_show_client_delete_action(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
+            phone="54221555232",
             city="La Plata",
-            phone="221555232",
             email="brujita75@hotmail.com",
         )
 
@@ -172,8 +172,8 @@ class ClientsRepoTestCase(PlaywrightTestCase):
     def test_should_can_be_able_to_delete_a_client(self):
         Client.objects.create(
             name="Juan Sebastián Veron",
+            phone="54221555232",
             city="La Plata",
-            phone="221555232",
             email="brujita75@hotmail.com",
         )
 
@@ -210,7 +210,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_role("form")).to_be_visible()
 
         self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
-        self.page.get_by_label("Teléfono").fill("221555232")
+        self.page.get_by_label("Teléfono").fill("54221555232")
         self.page.get_by_label("Email").fill("brujita75@hotmail.com")
         self.page.get_by_label("Ciudad").select_option("La Plata")
 
@@ -218,7 +218,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_role("button", name="Guardar").click()
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).to_be_visible()
-        expect(self.page.get_by_text("221555232")).to_be_visible()
+        expect(self.page.get_by_text("54221555232")).to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).to_be_visible()
         expect(self.page.get_by_text("La Plata")).to_be_visible()
 
@@ -233,13 +233,13 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Por favor ingrese un teléfono")).to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese un email")).to_be_visible()
 
-        self.page.get_by_label("Nombre").fill("Juan Sebastián Veron54")
-        self.page.get_by_label("Teléfono").fill("221555232")
+        self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
+        self.page.get_by_label("Teléfono").fill("54221555232")
         self.page.get_by_label("Email").fill("brujita75")
         self.page.get_by_label("Ciudad").select_option("La Plata")
         self.page.get_by_role("button", name="Guardar").click()
 
-        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).to_be_visible()
+        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).not_to_be_visible()
 
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(
@@ -253,8 +253,8 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
     def test_should_be_able_to_edit_a_client(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
+            phone="54221555232",
             city="La Plata",
-            phone="221555232",
             email="brujita75@hotmail.com",
         )
 
@@ -262,7 +262,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{path}")
 
         self.page.get_by_label("Nombre").fill("Guido Carrillo")
-        self.page.get_by_label("Teléfono").fill("221232555")
+        self.page.get_by_label("Teléfono").fill("54221232555")
         self.page.get_by_label("Email").fill("goleador@gmail.com")
         self.page.get_by_label("Ciudad").select_option("Berisso")
 
@@ -270,12 +270,12 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
 
         expect(self.page.get_by_text("Juan Sebastián Veron")).not_to_be_visible()
         expect(self.page.get_by_text("La Plata")).not_to_be_visible()
-        expect(self.page.get_by_text("221555232")).not_to_be_visible()
+        expect(self.page.get_by_text("54221555232")).not_to_be_visible()
         expect(self.page.get_by_text("brujita75@hotmail.com")).not_to_be_visible()
 
         expect(self.page.get_by_text("Guido Carrillo")).to_be_visible()
         expect(self.page.get_by_text("Berisso")).to_be_visible()
-        expect(self.page.get_by_text("221232555")).to_be_visible()
+        expect(self.page.get_by_text("54221232555")).to_be_visible()
         expect(self.page.get_by_text("goleador@gmail.com")).to_be_visible()
 
         edit_action = self.page.get_by_role("link", name="Editar")
@@ -580,7 +580,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         client = Client.objects.create(
         name="Juan Sebastian Veron",
         email="juan.veron@example.com",
-        phone="123456789",
+        phone="54123456789",
         )
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
 

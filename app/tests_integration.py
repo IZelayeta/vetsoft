@@ -60,7 +60,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",             
                 "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
@@ -69,8 +69,11 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(str(clients[0].phone), "221555232")
+        
+        self.assertEqual(str(clients[0].phone), "54221555232")
+      
         self.assertEqual(clients[0].city, "La Plata")
+
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
         self.assertRedirects(response, reverse("clients_repo"))
@@ -107,7 +110,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",             
                 "city": "La Plata",
                 "email": "brujita75",
             },
@@ -115,11 +118,24 @@ class ClientsTest(TestCase):
 
         self.assertContains(response, "Por favor ingrese un email valido")
 
+    def test_validation_invalid_phone(self):
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "brujita75",
+            },
+        )
+
+        self.assertContains(response, "Por favor el telefono debe iniciar con 54")
+        
     def test_edit_user_with_valid_data(self):
         client = Client.objects.create(
-            name="Juan Sebastián Veron",
-            city="La Plata",
-            phone="221555232",
+            name="Juan Sebastián Veron",           
+            phone="54221555232",
+            city="La Plata",           
             email="brujita75@hotmail.com",
         )
 
@@ -465,7 +481,7 @@ class PetsTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",        
                 "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
@@ -508,7 +524,7 @@ class PetsTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
