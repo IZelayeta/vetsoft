@@ -31,7 +31,7 @@ class ClientModelTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "54221555232")
+        self.assertEqual(str(clients[0].phone), "54221555232")
         self.assertEqual(clients[0].city, "La Plata")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -58,13 +58,13 @@ class ClientModelTest(TestCase):
         )
         client = Client.objects.get(pk=1)
         
-        self.assertEqual(client.phone, "54221555232")
+        self.assertEqual(str(client.phone), "54221555232")
 
         client.update_client({"phone": "54221555233"})
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.phone, "54221555233")
+        self.assertEqual(str(client_updated.phone), "54221555233")
 
     def test_update_client_with_error(self):
         Client.save_client(
@@ -77,13 +77,13 @@ class ClientModelTest(TestCase):
         )
         client = Client.objects.get(pk=1)
         
-        self.assertEqual(client.phone, "54221555232")
+        self.assertEqual(str(client.phone), "54221555232")
 
         client.update_client({"phone": ""})
 
         client_updated = Client.objects.get(pk=1)
         
-        self.assertEqual(client_updated.phone, "54221555232")
+        self.assertEqual(str(client_updated.phone), "54221555232")
 
 class ProviderModelTest(TestCase):
     """
