@@ -23,7 +23,7 @@ class ClientModelTest(TestCase):
             {
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
-                "city": "La Plata"
+                "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
         )

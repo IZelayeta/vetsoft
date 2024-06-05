@@ -580,7 +580,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         client = Client.objects.create(
         name="Juan Sebastian Veron",
         email="juan.veron@example.com",
-        phone="54123456789"
+        phone="54123456789",
         )
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
 
