@@ -70,7 +70,7 @@ class ClientsTest(TestCase):
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
         
-        self.assertEqual(clients[0].phone, "54221555232")
+        self.assertEqual(str(clients[0].phone), "54221555232")
       
         self.assertEqual(clients[0].city, "La Plata")
 
