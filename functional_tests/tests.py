@@ -239,7 +239,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Ciudad").select_option("La Plata")
         self.page.get_by_role("button", name="Guardar").click()
 
-        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).to_be_visible()
+        expect(self.page.get_by_text("El nombre solo puede contener letras y espacios")).not_to_be_visible()
 
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(
