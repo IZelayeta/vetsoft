@@ -65,7 +65,7 @@ def validate_client(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-
+    
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
