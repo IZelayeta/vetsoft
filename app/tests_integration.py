@@ -61,7 +61,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Juan Sebastian Veron",
                 "phone": "221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
         )
@@ -69,8 +69,8 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
-        self.assertEqual(clients[0].address, "13 y 44")
+        self.assertEqual(str(clients[0].phone), "221555232")
+        self.assertEqual(clients[0].city, "La Plata")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
         self.assertRedirects(response, reverse("clients_repo"))
@@ -108,7 +108,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Juan Sebastian Veron",
                 "phone": "221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75",
             },
         )
@@ -118,7 +118,7 @@ class ClientsTest(TestCase):
     def test_edit_user_with_valid_data(self):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
+            city="La Plata",
             phone="221555232",
             email="brujita75@hotmail.com",
         )
@@ -136,8 +136,8 @@ class ClientsTest(TestCase):
 
         editedClient = Client.objects.get(pk=client.id)
         self.assertEqual(editedClient.name, "Guido Carrillo")
-        self.assertEqual(editedClient.phone, client.phone)
-        self.assertEqual(editedClient.address, client.address)
+        self.assertEqual(str(editedClient.phone), client.phone)
+        self.assertEqual(editedClient.city, client.city)
         self.assertEqual(editedClient.email, client.email)
 
 class ProvidersTest(TestCase):
@@ -196,7 +196,7 @@ class ProvidersTest(TestCase):
     def test_validation_errors_create_provider(self):
         response = self.client.post(
             reverse("providers_form"),
-             data={},
+            data={},
         )
 
         self.assertContains(response, "Por favor ingrese un nombre")
@@ -466,7 +466,7 @@ class PetsTest(TestCase):
             {
                 "name": "Juan Sebastian Veron",
                 "phone": "221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
         )
@@ -509,7 +509,7 @@ class PetsTest(TestCase):
             {
                 "name": "Juan Sebastian Veron",
                 "phone": "221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@hotmail.com",
             },
         )

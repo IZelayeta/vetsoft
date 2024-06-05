@@ -409,7 +409,7 @@ class Client(models.Model):
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField()
-    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
     products = models.ManyToManyField(Product)
 
     def str(self):
@@ -426,7 +426,7 @@ class Client(models.Model):
             name=client_data.get("name"),
             phone=client_data.get("phone"),
             email=client_data.get("email"),
-            address=client_data.get("address"),
+            city=client_data.get("city"),
         )
 
         return True, None
@@ -435,7 +435,7 @@ class Client(models.Model):
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
-        self.address = client_data.get("address", "") or self.address
+        self.city = client_data.get("city", "") or self.city
 
         self.save()
 
