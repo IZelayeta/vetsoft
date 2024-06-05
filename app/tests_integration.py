@@ -54,6 +54,19 @@ class ClientsTest(TestCase):
         self.assertContains(response, "Por favor ingrese un nombre")
         self.assertContains(response, "Por favor ingrese un teléfono")
         self.assertContains(response, "Por favor ingrese un email")
+    
+    def test_validation_invalid_name(self):
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "carlos54",
+                "phone": "54221555232",
+                "address": "13 y 44",
+                "email": "carlix@gmail.com",
+            },
+        )
+
+        self.assertContains(response, "El nombre solo puede contener letras y espacios")
 
     def test_should_response_with_404_status_if_client_doesnt_exists(self):
         response = self.client.get(reverse("clients_edit", kwargs={"id": 100}))

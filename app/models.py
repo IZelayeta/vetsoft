@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 
 from django.db import models
@@ -34,6 +35,8 @@ def validate_client(data):
 
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
+    elif not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$', name):
+        errors["name"] = "El nombre solo puede contener letras y espacios"
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"

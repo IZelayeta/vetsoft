@@ -23,6 +23,18 @@ class ClientModelTest(TestCase):
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
+    def test_cant_create_client_with_error(self):
+        Client.save_client(
+            {
+                "name": "",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "",
+            },
+        )
+        clients = Client.objects.all()
+        self.assertEqual(len(clients), 0)
+
     def test_can_update_client(self):
         Client.save_client(
             {
