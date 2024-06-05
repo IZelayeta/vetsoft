@@ -27,7 +27,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.browser: Browser = playwright.firefox.launch(
-            headless=headless, slow_mo=int(slow_mo)
+            headless=headless, slow_mo=int(slow_mo),
         )
 
     @classmethod
@@ -129,7 +129,7 @@ class ClientsRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
         add_client_action = self.page.get_by_role(
-            "link", name="Nuevo cliente", exact=False
+            "link", name="Nuevo cliente", exact=False,
         )
         expect(add_client_action).to_have_attribute("href", reverse("clients_form"))
 
@@ -145,7 +145,7 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("clients_edit", kwargs={"id": client.id})
+            "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
     def test_should_show_client_delete_action(self):
@@ -159,7 +159,7 @@ class ClientsRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de cliente"
+            "form", name="Formulario de eliminación de cliente",
         )
         client_id_input = edit_form.locator("input[name=client_id]")
 
@@ -241,11 +241,11 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
 
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(
-            self.page.get_by_text("Por favor ingrese un teléfono")
+            self.page.get_by_text("Por favor ingrese un teléfono"),
         ).not_to_be_visible()
 
         expect(
-            self.page.get_by_text("Por favor ingrese un email valido")
+            self.page.get_by_text("Por favor ingrese un email valido"),
         ).to_be_visible()
 
     def test_should_be_able_to_edit_a_client(self):
@@ -278,7 +278,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("clients_edit", kwargs={"id": client.id})
+            "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
 class ProvidersRepoTestCase(PlaywrightTestCase):
@@ -326,7 +326,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
         add_provider_action = self.page.get_by_role(
-            "link", name="Nuevo proveedor", exact=False
+            "link", name="Nuevo proveedor", exact=False,
         )
         expect(add_provider_action).to_have_attribute("href", reverse("providers_form"))
 
@@ -341,7 +341,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("providers_edit", kwargs={"id": provider.id})
+            "href", reverse("providers_edit", kwargs={"id": provider.id}),
         )
 
     def test_should_show_provider_delete_action(self):
@@ -354,7 +354,7 @@ class ProvidersRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('providers_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de proveedor"
+            "form", name="Formulario de eliminación de proveedor",
         )
         provider_id_input = edit_form.locator("input[name=provider_id]")
 
@@ -503,7 +503,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
 
         add_vet_action = self.page.get_by_role(
-            "link", name="Nuevo veterinario", exact=False
+            "link", name="Nuevo veterinario", exact=False,
         )
         expect(add_vet_action).to_have_attribute("href", reverse("vets_form"))
     
@@ -519,7 +519,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("vets_edit", kwargs={"id": vet.id})
+            "href", reverse("vets_edit", kwargs={"id": vet.id}),
         )
 
     def test_should_show_vet_delete_action(self):
@@ -532,7 +532,7 @@ class VetsRepoTestCase(PlaywrightTestCase):
 
         self.page.goto(f"{self.live_server_url}{reverse('vets_repo')}")
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de veterinario"
+            "form", name="Formulario de eliminación de veterinario",
         )
         vet_id_input = edit_form.locator("input[name=vet_id]")
         expect(edit_form).to_be_visible()
@@ -578,7 +578,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         client = Client.objects.create(
         name="Juan Sebastian Veron",
         email="juan.veron@example.com",
-        phone="123456789"
+        phone="123456789",
         )
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
 
@@ -643,7 +643,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
         add_medicine_action = self.page.get_by_role(
-            "link", name="Nueva medicina", exact=False
+            "link", name="Nueva medicina", exact=False,
         )
         expect(add_medicine_action).to_have_attribute("href", reverse("medicine_form"))
 
@@ -658,7 +658,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("medicine_edit", kwargs={"id": medicine.id})
+            "href", reverse("medicine_edit", kwargs={"id": medicine.id}),
         )
 
     def test_should_show_client_delete_action(self):
@@ -671,7 +671,7 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         self.page.goto(f"{self.live_server_url}{reverse('medicine_repo')}")
 
         edit_form = self.page.get_by_role(
-            "form", name="Formulario de eliminación de la medicina"
+            "form", name="Formulario de eliminación de la medicina",
         )
         medicine_id_input = edit_form.locator("input[name=medicine_id]")
 
@@ -783,7 +783,7 @@ class VetCreateEditTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("vets_edit", kwargs={"id": vet.id})
+            "href", reverse("vets_edit", kwargs={"id": vet.id}),
         )
 
 class MedicineCreateEditTestCase(PlaywrightTestCase):
@@ -852,5 +852,5 @@ class MedicineCreateEditTestCase(PlaywrightTestCase):
 
         edit_action = self.page.get_by_role("link", name="Editar")
         expect(edit_action).to_have_attribute(
-            "href", reverse("medicine_edit", kwargs={"id": medicine.id})
+            "href", reverse("medicine_edit", kwargs={"id": medicine.id}),
         )
