@@ -29,7 +29,7 @@ class ClientModelTest(TestCase):
                 "name": "",
                 "phone": "221555232",
                 "address": "13 y 44",
-                "email": ""
+                "email": "",
             },
         )
         clients = Client.objects.all()
