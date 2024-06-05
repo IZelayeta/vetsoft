@@ -62,9 +62,7 @@ def validate_client(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-    elif not str(phone).startswith("54"):
-        errors["phone"] = "Por favor el telefono debe iniciar con 54"
-
+    
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
